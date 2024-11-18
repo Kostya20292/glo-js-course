@@ -1,10 +1,18 @@
-let title;
-let screens;
-let screenPrice;
-let rollback;
-let fullPrice;
-let adaptive;
+const num = 266219;
+const numArray = String(num).split('');
 
-alert('Hello world');
+const result = numArray.reduce((prev, next) => {
+    return prev * next;
+}, 1);
 
-console.log('Hello world');
+const newResult = result ** 3;
+
+console.log(num);
+
+console.log(numArray);
+
+console.log(result);
+
+console.log(newResult);
+
+console.log(String(newResult).slice(0, 2));
