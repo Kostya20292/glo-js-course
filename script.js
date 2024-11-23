@@ -1,3 +1,5 @@
+'use strict';
+
 const lang = prompt("Введите язык ('ru' или 'en')").toLowerCase();
 const days = {
     ru: [
@@ -36,3 +38,14 @@ switch (lang) {
 }
 
 console.log(days[lang]);
+
+const namePerson = prompt('Введите имя');
+
+const answer =
+    namePerson === 'Артем'
+        ? 'Директор'
+        : namePerson === 'Алекс'
+        ? 'Преподаватель'
+        : 'Студент';
+
+console.log(answer);
