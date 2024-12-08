@@ -1,87 +1,30 @@
-'use strict';
+const week = [
+    'Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+    'Воскресенье',
+];
+const element = document.querySelector('body');
+const data = new Date();
+const currentDay = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' }).format(
+    data
+);
 
-const appData = {
-    title: '',
-    screens: '',
-    screenPrice: 0,
-    adaptive: true,
-    rollback: 10,
-    allServicePrices: 0,
-    fullPrice: 0,
-    servicePercentPrice: 0,
-    service1: '',
-    service2: '',
-    asking: () => {
-        this.title = prompt(
-            'Как называется ваш проект?',
-            'Калькулятор верстки'
-        );
-        this.screens = prompt(
-            'Какие типы экранов нужно разработать?',
-            'Простые, Сложные'
-        );
+console.log(currentDay);
 
-        do {
-            this.screenPrice = +prompt('Сколько будет стоить данная работа?');
-        } while (!isNumber(this.screenPrice) || this.screenPrice === 0);
+week.forEach((item) => {
+    const appendElement = document.createElement('p');
+    appendElement.textContent = item;
+    if (item.toLocaleLowerCase() === currentDay) {
+        appendElement.style.fontWeight = 'bold';
+    }
 
-        this.adaptive = confirm('Нужен ли адаптив на сайте?');
-    },
-    isNumber: (num) => !isNaN(parseFloat(num)) && isFinite(num),
-    getRollbackMessage: (price) => {
-        if (price >= 30000) {
-            return 'Даем скидку в 10%';
-        } else if (price >= 15000 && price <= 30000) {
-            return 'Даем скидку в 5%';
-        } else if (price <= 15000 && price >= 0) {
-            return 'Скидка не предусмотрена';
-        } else if (price < 0) {
-            return 'Что то пошло не так';
-        }
-    },
-    getAllServicePrices: () => {
-        let sum = 0;
-        let servicePrice;
+    if (item === 'Суббота' || item === 'Воскресенье') {
+        appendElement.style.fontStyle = 'italic';
+    }
 
-        for (let i = 0; i < 2; i++) {
-            if (i === 0) {
-                this.service1 = prompt(
-                    'Какой дополнительный тип услуги нужен?'
-                );
-            } else if (i === 1) {
-                this.service2 = prompt(
-                    'Какой дополнительный тип услуги нужен?'
-                );
-            }
-
-            do {
-                servicePrice = +prompt('Сколько это будет стоить?');
-            } while (!isNumber(servicePrice) || servicePrice === 0);
-
-            sum += servicePrice;
-        }
-
-        return sum;
-    },
-    getFullPrice: () => this.screenPrice + this.allServicePrices,
-    getTitle: () =>
-        this.title.trim().slice(0, 1).toUpperCase() +
-        this.title.trim().slice(1).toLowerCase(),
-    getServicePercentPrices: () =>
-        Math.ceil(this.fullPrice - this.fullPrice * (this.rollback / 100)),
-    start: () => {
-        this.asking();
-        this.allServicePrices = getAllServicePrices();
-        this.fullPrice = getFullPrice();
-        this.servicePercentPrice = getServicePercentPrices();
-        this.title = getTitle();
-
-        logger();
-    },
-    logger: () => {
-        console.log(this.fullPrice);
-        console.log(this.servicePercentPrice);
-    },
-};
-
-appData.start();
+    element.appendChild(appendElement);
+});
