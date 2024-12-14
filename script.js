@@ -42,15 +42,15 @@ const appData = {
                 servicePrice = +prompt('Сколько это будет стоить?');
             } while (!appData.isNumber(servicePrice) || servicePrice === 0);
 
-            appData.services[name] = +servicePrice;
+            appData.services[`${name}${i}`] = +servicePrice;
         }
 
         appData.adaptive = confirm('Нужен ли адаптив на сайте?');
     },
     addPrices: () => {
-        for (let screen of appData.screens) {
-            appData.screenPrice += +screen.price;
-        }
+        appData.screenPrice = appData.screens.reduce((sum, screen) => {
+            return sum + screen.price;
+        }, 0);
 
         for (let key in appData.services) {
             appData.allServicePrices += appData.services[key];
@@ -92,19 +92,8 @@ const appData = {
     logger: () => {
         console.log(appData.fullPrice);
         console.log(appData.servicePercentPrice);
-        console.log(appData.screens);
+        console.log(appData.screenPrice);
     },
 };
 
 appData.start();
-
-// let title;
-
-// const isString = (str) => {
-//     // Проверяем, что это строка, и она не пуста
-//     return typeof str === 'string' && str.trim() !== '' && isNaN(Number(str));
-// };
-
-// do {
-//     title = prompt('Как называется ваш проект?');
-// } while (!isString(title));
