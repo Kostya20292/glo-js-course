@@ -1,109 +1,97 @@
 'use strict';
 
-const title = document.getElementById('title');
-const handlerBtn = document.querySelectorAll('.handler_btn');
-const screenBtn = document.querySelector('.screen-btn');
-const otherPersent = document.querySelectorAll('.other-items.percent');
-const otherNumber = document.querySelectorAll('.other-items.number');
-const inputRollback = document.querySelector('.rollback input');
-const rangeValue = document.querySelector('.rollback .range-value');
-const totalInputs = document.querySelectorAll('.total-input');
-let screens = document.querySelectorAll('.screen');
+const days = [
+    'Воскресенье',
+    'Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+];
+const months = [
+    'Января',
+    'Февраля',
+    'Марта',
+    'Апреля',
+    'Мая',
+    'Июня',
+    'Июля',
+    'Августа',
+    'Сентября',
+    'Октября',
+    'Ноября',
+    'Декабря',
+];
 
-const appData = {
-    title: '',
-    screens: [],
-    screenPrice: 0,
-    adaptive: true,
-    rollback: 10,
-    allServicePrices: 0,
-    fullPrice: 0,
-    servicePercentPrice: 0,
-    services: {},
-    asking: () => {
-        do {
-            appData.title = prompt('Как называется ваш проект?');
-        } while (!appData.isString(appData.title));
+const hoursForms = ['час', 'часа', 'часов'];
+const minutesForms = ['минута', 'минуты', 'минут'];
+const secondsForms = ['секунда', 'секунды', 'секунд'];
 
-        for (let i = 0; i < 2; i++) {
-            let name;
-            let price;
+const currentDate = () => {
+    const today = new Date();
+    const date = today.getDate();
+    const day = days[today.getDay()];
+    const month = months[today.getMonth()];
+    const year = today.getFullYear();
+    const hours = today.getHours();
+    const minutes = today.getMinutes();
+    const seconds = today.getSeconds();
 
-            do {
-                name = prompt('Какие типы экранов нужно разработать?');
-            } while (!appData.isString(name));
+    let dateAnotherFormat;
+    let monthAnotherFormat;
 
-            do {
-                price = +prompt('Сколько будет стоить данная работа?');
-            } while (!appData.isNumber(price) || price === 0);
+    let hoursFormatFirst;
+    let hoursFormatSecond;
+    let minutesFormatFirst;
+    let minutesFormatSecond;
+    let secondsFormatFirst;
+    let secondsFormatSecond;
 
-            appData.screens.push({ id: i, name, price });
+    let dateFirstFormat;
+    let dateSecondFormat;
+
+    const declension = (number, words) => {
+        if (number % 100 >= 11 && number % 100 <= 19) {
+            return words[2];
         }
-
-        for (let i = 0; i < 2; i++) {
-            let name;
-            let servicePrice;
-
-            do {
-                name = prompt('Какой дополнительный тип услуги нужен?');
-            } while (!appData.isString(name));
-
-            do {
-                servicePrice = +prompt('Сколько это будет стоить?');
-            } while (!appData.isNumber(servicePrice) || servicePrice === 0);
-
-            appData.services[`${name}${i}`] = +servicePrice;
+        if (number % 10 === 1) {
+            return words[0];
         }
-
-        appData.adaptive = confirm('Нужен ли адаптив на сайте?');
-    },
-    addPrices: () => {
-        appData.screenPrice = appData.screens.reduce((sum, screen) => {
-            return sum + screen.price;
-        }, 0);
-
-        for (let key in appData.services) {
-            appData.allServicePrices += appData.services[key];
+        if ([2, 3, 4].includes(number % 10)) {
+            return words[1];
         }
-    },
-    isNumber: (num) => !isNaN(parseFloat(num)) && isFinite(num),
-    isString: (str) =>
-        typeof str === 'string' && str.trim() !== '' && isNaN(Number(str)),
-    getRollbackMessage: (price) => {
-        if (price >= 30000) {
-            return 'Даем скидку в 10%';
-        } else if (price >= 15000 && price <= 30000) {
-            return 'Даем скидку в 5%';
-        } else if (price <= 15000 && price >= 0) {
-            return 'Скидка не предусмотрена';
-        } else if (price < 0) {
-            return 'Что то пошло не так';
-        }
-    },
-    getFullPrice: () =>
-        (appData.fullPrice = appData.screenPrice + appData.allServicePrices),
-    getTitle: () =>
-        (appData.title =
-            appData.title.trim().slice(0, 1).toUpperCase() +
-            appData.title.trim().slice(1).toLowerCase()),
-    getServicePercentPrices: () =>
-        (appData.servicePercentPrice = Math.ceil(
-            appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
-        )),
-    start: () => {
-        appData.asking();
-        appData.addPrices();
-        appData.getFullPrice();
-        appData.getServicePercentPrices();
-        appData.getTitle();
+        return words[2];
+    };
 
-        appData.logger();
-    },
-    logger: () => {
-        console.log(appData.fullPrice);
-        console.log(appData.servicePercentPrice);
-        console.log(appData.screenPrice);
-    },
+    const formatDate = (number) => {
+        return number < 10 ? `0${number}` : number;
+    };
+
+    const appendOnPage = () => {
+        const body = document.body;
+
+        body.innerHTML = `<p>${dateFirstFormat}</p>
+        <p>${dateSecondFormat}</p>`;
+    };
+
+    dateAnotherFormat = formatDate(date);
+    monthAnotherFormat = formatDate(today.getMonth() + 1);
+
+    hoursFormatFirst = declension(hours, hoursForms);
+    minutesFormatFirst = declension(minutes, minutesForms);
+    secondsFormatFirst = declension(seconds, secondsForms);
+
+    hoursFormatSecond = formatDate(hours);
+    minutesFormatSecond = formatDate(minutes);
+    secondsFormatSecond = formatDate(seconds);
+
+    dateFirstFormat = `Сегодня ${day} ${date} ${month} ${year} года ${hours} ${hoursFormatFirst} ${minutes} ${minutesFormatFirst} ${seconds} ${secondsFormatFirst}`;
+    dateSecondFormat = `${dateAnotherFormat}.${monthAnotherFormat}.${year} - ${hoursFormatSecond}:${minutesFormatSecond}:${secondsFormatSecond}`;
+
+    appendOnPage();
 };
 
-appData.start();
+setInterval(currentDate, 1000);
+
+currentDate();
