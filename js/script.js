@@ -45,6 +45,8 @@ const appData = {
         inputRollback.addEventListener('input', () => {
             rollbackValue.textContent = `${inputRollback.value}%`;
             appData.rollback = +inputRollback.value;
+
+            if (appData.finalResults) appData.changeRollback();
         });
     },
     addTitle: () => {
@@ -146,6 +148,16 @@ const appData = {
         fullTotalCount.value = appData.fullPrice;
         totalCountRollback.value = appData.servicePercentPrice;
         totalCount.value = appData.screensCount;
+    },
+    changeRollback: () => {
+        inputRollback.addEventListener('input', () => {
+            appData.servicePercentPrice = Math.ceil(
+                appData.fullPrice -
+                    appData.fullPrice * (inputRollback.value / 100)
+            );
+
+            totalCountRollback.value = appData.servicePercentPrice;
+        });
     },
     start: () => {
         appData.finalResults = true;
