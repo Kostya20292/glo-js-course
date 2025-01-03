@@ -8,15 +8,17 @@ const otherItemsNumber = document.querySelectorAll('.other-items.number');
 const handlerBtn = document.querySelectorAll('.handler_btn');
 const inputRollback = document.querySelector('.rollback input');
 const rollbackValue = document.querySelector('.rollback .range-value');
-
 const total = document.getElementById('total');
 const totalCount = document.getElementById('total-count');
 const totalCountOther = document.getElementById('total-count-other');
 const fullTotalCount = document.getElementById('total-full-count');
 const totalCountRollback = document.getElementById('total-count-rollback');
-
 const checkboxElements = document.querySelectorAll('input[type="checkbox"]');
 const resetButton = document.getElementById('reset');
+const cmsCheckbox = document.getElementById('cms-open');
+const cmsBlock = document.querySelector('.hidden-cms-variants');
+const cmsSelect = cmsBlock.querySelector('select');
+const cmsInput = cmsBlock.querySelector('.main-controls__input input');
 
 let screens = document.querySelectorAll('.screen');
 
@@ -24,7 +26,6 @@ const appData = {
     screens: [],
     screenPrice: 0,
     screensCount: 0,
-    adaptive: true,
     rollback: 0,
     servicePricesPercent: 0,
     servicePricesNumber: 0,
@@ -33,17 +34,14 @@ const appData = {
     servicesPercent: {},
     servicesNumber: {},
     finalResults: false,
+    cmsPercent: 0,
+    cmsPrice: 0,
     init() {
         this.addTitle();
-
         this.checkScreens();
 
         startButton.addEventListener('click', () => {
             if (this.checkScreens()) {
-                this.start();
-                resetButton.style.display = 'flex';
-                startButton.style.display = 'none';
-
                 const numberInputs = document.querySelectorAll(
                     '.screen .main-controls__input input'
                 );
@@ -51,20 +49,26 @@ const appData = {
                     '.screen .main-controls__select select'
                 );
 
+                resetButton.style.display = 'flex';
+                startButton.style.display = 'none';
+
+                this.start();
                 this.disabledElements(numberInputs);
                 this.disabledElements(selectElements);
                 this.disabledElements(checkboxElements);
-
-                console.log(appData);
+                this.disabledCmsElements();
             }
         });
         buttonPlus.addEventListener('click', this.addScreenBlock);
+
         inputRollback.addEventListener('input', () => {
             rollbackValue.textContent = `${inputRollback.value}%`;
             this.rollback = +inputRollback.value;
 
             if (this.finalResults) this.changeRollback();
         });
+
+        cmsCheckbox.addEventListener('input', this.addCms);
 
         resetButton.addEventListener('click', () => {
             resetButton.style.display = 'none';
@@ -104,6 +108,15 @@ const appData = {
 
             if (!select.value || !input.value) {
                 buttonDisabled = false;
+            }
+
+            if (cmsCheckbox.checked) {
+                if (
+                    !cmsSelect.value ||
+                    (cmsSelect.value === 'other' && !cmsInput.value)
+                ) {
+                    buttonDisabled = false;
+                }
             }
         });
 
@@ -156,19 +169,45 @@ const appData = {
                 this.screenPrice * (this.servicesPercent[key] / 100);
         }
 
+        this.cmsPrice = this.screenPrice * (this.cmsPercent / 100);
+
         this.fullPrice =
             this.screenPrice +
             this.servicePricesPercent +
-            this.servicePricesNumber;
+            this.servicePricesNumber +
+            this.cmsPrice;
 
         this.servicePercentPrice = Math.ceil(
             this.fullPrice - this.fullPrice * (this.rollback / 100)
         );
     },
+    addCms() {
+        if (cmsCheckbox.checked) {
+            cmsBlock.style.display = 'flex';
+
+            cmsSelect.addEventListener('change', () => {
+                if (cmsSelect.value === 'other') {
+                    cmsInput.parentNode.style.display = 'block';
+
+                    cmsInput.addEventListener('input', () => {
+                        appData.cmsPercent = +cmsInput.value;
+                    });
+                } else {
+                    appData.cmsPercent = +cmsSelect.value;
+
+                    cmsInput.parentNode.style.display = 'none';
+                }
+            });
+        } else {
+            cmsBlock.style.display = 'none';
+        }
+    },
     showResult() {
         total.value = this.screenPrice;
         totalCountOther.value =
-            this.servicePricesPercent + this.servicePricesNumber;
+            this.servicePricesPercent +
+            this.servicePricesNumber +
+            this.cmsPrice;
         fullTotalCount.value = this.fullPrice;
         totalCountRollback.value = this.servicePercentPrice;
         totalCount.value = this.screensCount;
@@ -185,15 +224,23 @@ const appData = {
     disabledElements(elements) {
         elements.forEach((element) => (element.disabled = true));
     },
+    disabledCmsElements() {
+        cmsCheckbox.disabled = true;
+        cmsSelect.disabled = true;
+        cmsInput.disabled = true;
+    },
     activeElements(elements) {
         elements.forEach((element) => (element.disabled = false));
     },
+    activeCmsElements() {
+        cmsCheckbox.disabled = false;
+        cmsSelect.disabled = false;
+        cmsInput.disabled = false;
+    },
     resetValues() {
-        this.title = '';
         this.screens = [];
         this.screenPrice = 0;
         this.screensCount = 0;
-        this.adaptive = true;
         this.rollback = 0;
         this.servicePricesPercent = 0;
         this.servicePricesNumber = 0;
@@ -202,6 +249,8 @@ const appData = {
         this.servicesPercent = {};
         this.servicesNumber = {};
         this.finalResults = false;
+        this.cmsPercent = 0;
+        this.cmsPrice = 0;
     },
     clearElements() {
         const numberInputs = document.querySelectorAll(
@@ -211,13 +260,17 @@ const appData = {
             '.screen .main-controls__select select'
         );
 
-        numberInputs.forEach((input) => (input.value = 0));
-
+        numberInputs.forEach((input) => (input.value = ''));
         selectElements.forEach((element) => (element.value = ''));
+        cmsInput.value = '';
+        cmsSelect.value = '';
 
         checkboxElements.forEach((element) => {
             element.checked = false;
         });
+
+        cmsBlock.style.display = 'none';
+        cmsInput.parentNode.style.display = 'none';
 
         inputRollback.value = 0;
         rollbackValue.textContent = '0%';
@@ -256,12 +309,10 @@ const appData = {
         this.activeElements(numberInputs);
         this.activeElements(selectElements);
         this.activeElements(checkboxElements);
-
+        this.activeCmsElements();
         this.resetValues();
         this.clearElements();
         this.deleteElements();
-
-        console.log(appData);
     },
 };
 
