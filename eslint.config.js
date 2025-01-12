@@ -25,7 +25,6 @@ export default [
       'no-console': 'warn',
       'no-debugger': 'error',
       'no-var': 'error',
-      'prefer-const': 'error',
       'prefer-arrow-callback': ['error', { allowNamedFunctions: false }],
       'prefer-template': 'error',
       'template-curly-spacing': ['error', 'never'],

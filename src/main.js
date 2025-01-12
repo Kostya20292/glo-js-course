@@ -1,5 +1,5 @@
-import { one } from './modules/one';
-import { two } from './modules/two';
+import { timer } from './modules/timer';
+import { daysFunc } from './modules/days';
 
-one();
-two();
+timer('22 january 2025');
+daysFunc();
