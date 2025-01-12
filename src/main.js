@@ -1,5 +1,16 @@
-import { timer } from './modules/timer';
-import { daysFunc } from './modules/days';
+const square = document.querySelector('.square');
 
-timer('22 january 2025');
-daysFunc();
+let count = 0;
+
+const animate = () => {
+  const animation = requestAnimationFrame(animate);
+
+  square.style.transform = `rotate(${count}deg)`;
+  count++;
+
+  if (count === 360) {
+    cancelAnimationFrame(animation);
+  }
+};
+
+animate();
