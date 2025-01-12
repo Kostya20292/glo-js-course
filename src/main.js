@@ -1,5 +1,61 @@
-import { timer } from './modules/timer';
-import { daysFunc } from './modules/days';
+let print1 = function () {
+  console.log('Крот');
+};
+let print2 = function () {
+  console.log('овце,');
+};
+let print3 = function () {
+  console.log('жирафу,');
+};
+let print4 = function () {
+  console.log('зайке');
+};
+let print5 = function () {
+  console.log('голубые');
+};
+let print6 = function () {
+  console.log('сшил');
+};
+let print7 = function () {
+  console.log('фуфайки');
+};
 
-timer('22 january 2025');
-daysFunc();
+let func1 = function () {
+  print3();
+  // ...
+};
+
+let func2 = function () {
+  func1();
+
+  setTimeout(() => {
+    print6();
+    // ...
+  }, 1000);
+};
+
+let func3 = function () {
+  setTimeout(() => {
+    func2();
+    print4();
+    // ...
+  }, 250);
+
+  print2();
+  // ...
+};
+
+setTimeout(() => {
+  print5();
+  // ...
+
+  setTimeout(() => {
+    print7();
+    // ...
+  }, 750);
+}, 500);
+
+print1();
+// ...
+
+func3();
