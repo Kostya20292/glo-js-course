@@ -1,5 +1,7 @@
 import { timer } from './modules/timer';
-import { daysFunc } from './modules/days';
+import { menu } from './modules/menu';
+import { modal } from './modules/modal';
 
 timer('22 january 2025');
-daysFunc();
+menu();
+modal();

@@ -15,7 +15,6 @@ export default [
       quotes: ['error', 'single', { avoidEscape: true }],
       'linebreak-style': ['error', 'unix'],
       semi: ['error', 'always'],
-      'comma-dangle': ['error', 'always-multiline'],
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'arrow-parens': ['error', 'always'],
       'arrow-spacing': ['error', { before: true, after: true }],
