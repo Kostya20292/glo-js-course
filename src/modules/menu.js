@@ -1,30 +1,22 @@
 export const menu = () => {
   const menuElement = document.querySelector('menu');
-  const menuBtn = document.querySelector('.menu');
-  const closeBtn = menuElement.querySelector('.close-btn');
-  const menuItems = menuElement.querySelectorAll('ul>li>a');
-  const scrollBtn = document.querySelector('main > a');
-  const scrollElement = document.getElementById(scrollBtn.hash.slice(1));
 
-  const handleMenu = () => menuElement.classList.toggle('active-menu');
-
-  menuBtn.addEventListener('click', handleMenu);
-  closeBtn.addEventListener('click', handleMenu);
-
-  menuItems.forEach((menuItem) =>
-    menuItem.addEventListener('click', (e) => {
-      const clickedElement = document.getElementById(menuItem.hash.slice(1));
-
-      clickedElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  const handleMenu = (e) => {
+    if (e.target.closest('.menu')) {
+      menuElement.classList.add('active-menu');
+    } else if (e.target.classList.contains('close-btn') || !e.target.closest('menu')) {
+      menuElement.classList.remove('active-menu');
+    } else if (e.target.closest('menu > ul > li > a')) {
+      const clickedElement = document.getElementById(
+        e.target.closest('menu > ul > li > a').getAttribute('href').slice(1)
+      );
 
       e.preventDefault();
-      handleMenu();
-    })
-  );
 
-  scrollBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+      clickedElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      menuElement.classList.remove('active-menu');
+    }
+  };
 
-    scrollElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  });
+  document.addEventListener('click', handleMenu);
 };

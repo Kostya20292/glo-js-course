@@ -1,7 +1,6 @@
 export const modal = () => {
   const popup = document.querySelector('.popup');
   const buttons = document.querySelectorAll('.popup-btn');
-  const closeBtn = popup.querySelector('.popup-close');
 
   let animationOpenId;
   let animationCloseId;
@@ -43,12 +42,14 @@ export const modal = () => {
     });
   });
 
-  closeBtn.addEventListener('click', () => {
-    if (document.documentElement.clientWidth >= 768) {
-      popupAnimateClose();
-    } else {
-      popup.style.display = 'none';
-      popup.style.opacity = 0;
+  popup.addEventListener('click', (e) => {
+    if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close')) {
+      if (document.documentElement.clientWidth >= 768) {
+        popupAnimateClose();
+      } else {
+        popup.style.display = 'none';
+        popup.style.opacity = 0;
+      }
     }
   });
 };

@@ -60,7 +60,6 @@ export default [
       'no-new': 'error',
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
       'spaced-comment': ['error', 'always', { exceptions: ['-', '+'] }],
-      'operator-linebreak': ['error', 'before'],
       'no-continue': 'error',
       'no-lonely-if': 'error',
       'no-nested-ternary': 'error',
