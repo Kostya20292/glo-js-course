@@ -58,7 +58,6 @@ export default [
       'dot-notation': ['error', { allowKeywords: true }],
       'newline-per-chained-call': ['error', { ignoreChainWithDepth: 4 }],
       'no-new': 'error',
-      'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
       'spaced-comment': ['error', 'always', { exceptions: ['-', '+'] }],
       'no-continue': 'error',
       'no-lonely-if': 'error',
