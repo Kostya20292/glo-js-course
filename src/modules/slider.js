@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -6,10 +7,10 @@ export const slider = () => {
     loop: true,
     centeredSlides: true,
     modules: [Autoplay, Navigation, Pagination],
-    // autoplay: {
-    //   delay: 2000,
-    //   disableOnInteraction: false,
-    // },
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
     pagination: {
       el: '.portfolio-dots',
       clickable: true,
