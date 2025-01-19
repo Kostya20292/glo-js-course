@@ -5,6 +5,7 @@ import { inputValidation } from './modules/inputValidation';
 import { tabs } from './modules/tabs';
 import { scroll } from './modules/scroll';
 import { slider } from './modules/slider';
+import { calculator } from './modules/calculator';
 
 timer('22 january 2025');
 menu();
@@ -13,3 +14,4 @@ scroll();
 inputValidation();
 tabs();
 slider();
+calculator(100);
