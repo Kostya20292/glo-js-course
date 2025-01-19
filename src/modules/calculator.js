@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 export const calculator = (price = 100) => {
   const calcBlock = document.querySelector('.calc-block');
   const calcType = document.querySelector('.calc-type');
@@ -5,6 +6,26 @@ export const calculator = (price = 100) => {
   const calcCount = document.querySelector('.calc-count');
   const calcDay = document.querySelector('.calc-day');
   const total = document.getElementById('total');
+
+  let currentTotal = 0;
+
+  const animateValue = (start, end, duration = 500) => {
+    const range = end - start;
+    const startTime = performance.now();
+
+    const step = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const value = Math.floor(start + range * progress);
+      total.textContent = value;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
+  };
 
   const countCalc = () => {
     const calcTypeValue = +calcType.value;
@@ -30,7 +51,10 @@ export const calculator = (price = 100) => {
       totalValue = 0;
     }
 
-    total.textContent = totalValue;
+    animateValue(currentTotal, totalValue);
+    currentTotal = totalValue;
+
+    total.textContent = animateValue;
   };
 
   calcBlock.addEventListener('input', countCalc);
