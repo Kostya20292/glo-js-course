@@ -1,4 +1,6 @@
 /* eslint-disable no-mixed-operators */
+import { animate } from './helpers';
+
 export const calculator = (price = 100) => {
   const calcBlock = document.querySelector('.calc-block');
   const calcType = document.querySelector('.calc-type');
@@ -9,22 +11,17 @@ export const calculator = (price = 100) => {
 
   let currentTotal = 0;
 
-  const animateValue = (start, end, duration = 500) => {
+  const animateValue = (start, end) => {
     const range = end - start;
-    const startTime = performance.now();
 
-    const step = (currentTime) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const value = Math.floor(start + range * progress);
-      total.textContent = value;
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
-    };
-
-    requestAnimationFrame(step);
+    animate({
+      duration: 500,
+      timing: (timeFraction) => timeFraction,
+      draw: (progress) => {
+        const value = Math.floor(start + range * progress);
+        total.textContent = value;
+      },
+    });
   };
 
   const countCalc = () => {
