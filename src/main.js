@@ -1,17 +1,21 @@
-import { timer } from './modules/timer';
-import { menu } from './modules/menu';
-import { modal } from './modules/modal';
-import { inputValidation } from './modules/inputValidation';
-import { tabs } from './modules/tabs';
-import { scroll } from './modules/scroll';
-import { slider } from './modules/slider';
-import { calculator } from './modules/calculator';
+const getData = () => {
+  return fetch('db.json')
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+};
 
-timer('22 january 2025');
-menu();
-modal();
-scroll();
-inputValidation();
-tabs();
-slider();
-calculator(100);
+const sendData = (obj) => {
+  return fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    body: JSON.stringify(obj),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+};
+
+getData()
+  .then((data) => sendData(data))
+  .then((data) => console.log(data));
