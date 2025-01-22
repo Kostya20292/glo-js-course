@@ -1,39 +1,36 @@
+import { animate } from './helpers';
+
 export const modal = () => {
   const popup = document.querySelector('.popup');
   const buttons = document.querySelectorAll('.popup-btn');
 
-  let animationOpenId;
-  let animationCloseId;
-  let count = 0;
-
-  const popupAnimateOpen = () => {
-    popup.style.display = 'block';
-    popup.style.opacity = count;
-    count = +(count + 0.05).toFixed(2);
-
-    animationOpenId = requestAnimationFrame(popupAnimateOpen);
-
-    if (count > 1) {
-      cancelAnimationFrame(animationOpenId);
-    }
+  const popupAnimateClose = () => {
+    animate({
+      duration: 1000, // Длительность закрытия (в миллисекундах)
+      timing: (timeFraction) => 1 - timeFraction, // Уменьшение прозрачности (от 1 до 0)
+      draw: (progress) => {
+        popup.style.opacity = progress;
+        if (progress === 0) {
+          popup.style.display = 'none';
+        }
+      },
+    });
   };
 
-  const popupAnimateClose = () => {
-    popup.style.opacity = count;
-    count = +(count - 0.05).toFixed(2);
-
-    animationCloseId = requestAnimationFrame(popupAnimateClose);
-
-    if (count < 0) {
-      popup.style.display = 'none';
-      cancelAnimationFrame(animationCloseId);
-    }
+  const popupAnimateOpen = () => {
+    popup.style.display = 'block'; // Устанавливаем display перед началом анимации
+    animate({
+      duration: 1000, // Длительность открытия (в миллисекундах)
+      timing: (timeFraction) => timeFraction, // Увеличение прозрачности (от 0 до 1)
+      draw: (progress) => {
+        popup.style.opacity = progress;
+      },
+    });
   };
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
       if (document.documentElement.clientWidth >= 768) {
-        count = 0;
         popupAnimateOpen();
       } else {
         popup.style.display = 'block';
