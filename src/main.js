@@ -6,6 +6,7 @@ import { tabs } from './modules/tabs';
 import { scroll } from './modules/scroll';
 import { slider } from './modules/slider';
 import { calculator } from './modules/calculator';
+import { sendForm } from './modules/sendForm';
 
 timer('22 january 2025');
 menu();
@@ -15,3 +16,6 @@ inputValidation();
 tabs();
 slider();
 calculator(100);
+sendForm({ formId: 'form1' });
+sendForm({ formId: 'form2' });
+sendForm({ formId: 'form3' });

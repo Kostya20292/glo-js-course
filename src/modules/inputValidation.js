@@ -12,11 +12,12 @@ export const inputValidation = () => {
 
   textInputs.forEach((input) => {
     input.addEventListener('input', () => {
-      input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/g, '');
+      input.value = input.value.replace(/[^а-яА-ЯёЁ0-9\s.,:;!?'"()\-\u00AB\u00BB]/g, '');
     });
 
     input.addEventListener('blur', () => {
       input.value = input.value
+        .replace(/[^а-яА-ЯёЁ0-9\s.,:;!?'"()\-\u00AB\u00BB]/g, '')
         .replace(/\s{2,}/g, ' ')
         .replace(/-+/g, '-')
         .trim();
@@ -25,7 +26,7 @@ export const inputValidation = () => {
 
   emailInputs.forEach((input) => {
     input.addEventListener('input', () => {
-      input.value = input.value.replace(/[^a-zA-Z0-9@._\-!~*']/g, '');
+      input.value = input.value.replace(/[^a-zA-Z0-9@._\-+!~*']/g, '');
     });
 
     input.addEventListener('blur', () => {
@@ -35,7 +36,7 @@ export const inputValidation = () => {
 
   telInputs.forEach((input) => {
     input.addEventListener('input', () => {
-      input.value = input.value.replace(/[^0-9()\-\s]/g, '');
+      input.value = input.value.replace(/[^0-9+\-()]/g, '');
     });
 
     input.addEventListener('blur', () => {
