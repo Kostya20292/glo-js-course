@@ -1,7 +1,9 @@
-export const sendForm = ({ formId, someElement = [] }) => {
+/* eslint-disable space-before-function-paren */
+export const sendForm = ({ formId, animationId, someElement = [] }) => {
   const form = document.getElementById(formId);
+  const animationElement = document.getElementById(animationId);
   const statusBlock = document.createElement('div');
-  const loadText = 'Загрузка...';
+
   const errorText = 'Ошибка!';
   const successText = 'Спасибо! Наш менеджер свяжется с вами!';
 
@@ -21,7 +23,9 @@ export const sendForm = ({ formId, someElement = [] }) => {
     const formData = new FormData(form);
     const formBody = {};
 
-    statusBlock.textContent = loadText;
+    animationElement.style.display = 'block';
+    statusBlock.style.display = 'none';
+
     form.append(statusBlock);
 
     formData.forEach((val, key) => {
@@ -40,12 +44,16 @@ export const sendForm = ({ formId, someElement = [] }) => {
 
     sendData(formBody)
       .then(() => {
+        animationElement.style.display = 'none';
+        statusBlock.style.display = 'block';
         statusBlock.textContent = successText;
+
         formElements.forEach((element) => {
           element.value = '';
         });
       })
       .catch(() => {
+        animationElement.style.display = 'none';
         statusBlock.textContent = errorText;
       });
   };
