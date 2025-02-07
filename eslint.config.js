@@ -19,7 +19,6 @@ export default [
       'arrow-parens': ['error', 'always'],
       'arrow-spacing': ['error', { before: true, after: true }],
       'object-curly-spacing': ['error', 'always'],
-      'space-before-function-paren': ['error', 'never'],
       'max-len': ['error', { code: 100, ignoreComments: true, ignoreUrls: true }],
       'no-console': 'warn',
       'no-debugger': 'error',
